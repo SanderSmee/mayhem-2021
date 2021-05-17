@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ninja.robbert.mayhem.api.InputMessage;
 import ninja.robbert.mayhem.api.OutputMessage;
+import ninja.robbert.mayhem.api.RegisterMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,6 +20,10 @@ public class MsgAdapter {
 
     public MsgAdapter() {
         mapper = new ObjectMapper();
+    }
+
+    public static InputMessage registerMessage() {
+        return new RegisterMessage("FOobAr", "sander.smeman@jdriven.com", "yadda-yadda");
     }
 
     public String toString(InputMessage msg) {

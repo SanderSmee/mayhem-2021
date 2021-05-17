@@ -25,7 +25,7 @@ public class Client {
 
         LOGGER.info("Connection status: {}", clientSocket.isConnected());
 
-        out = new PrintWriter(clientSocket.getOutputStream(), true);
+        out = new PrintWriter(clientSocket.getOutputStream(), false);
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     }
 
@@ -33,9 +33,20 @@ public class Client {
         return in.readLine();
     }
 
-    public void sendMessage(String msg) {
-        LOGGER.info("Sending msg: {}", msg);
+    public void sendMessageImmediate(String msg) {
+        LOGGER.info("Flushing msg: {}", msg);
         out.println(msg);
+        out.flush();
+    }
+
+    public void bufferMessage(String msg) {
+        LOGGER.info("Buffering msg: {}", msg);
+        out.println(msg);
+    }
+
+    public void flushToServer() {
+        LOGGER.info("Flushing messages");
+        out.flush();
     }
 
     public void closeConnection() throws IOException {
