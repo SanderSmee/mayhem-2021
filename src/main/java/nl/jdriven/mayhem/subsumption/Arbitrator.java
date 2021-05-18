@@ -1,5 +1,8 @@
 package nl.jdriven.mayhem.subsumption;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * An  Arbitrator object  manages a behavior control system by starting and stopping individual  behaviors
  * <br>  by the calling the <code>action()</code> and <code>suppress()</code> methods on them.
@@ -25,6 +28,7 @@ package nl.jdriven.mayhem.subsumption;
  * @see Behavior
  */
 public class Arbitrator {
+    private final Logger logger = LoggerFactory.getLogger(Arbitrator.class);
 
     private final int NONE = -1;
     public boolean keepRunning = true;
@@ -56,7 +60,7 @@ public class Arbitrator {
         _returnWhenInactive = returnWhenInactive;
         monitor = new Monitor();
         monitor.setDaemon(true);
-        System.out.println("Arbitrator created");
+        logger.info("Arbitrator created");
     }
 
     /**

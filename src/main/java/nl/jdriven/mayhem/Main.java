@@ -1,14 +1,14 @@
 package nl.jdriven.mayhem;
 
-import ninja.robbert.mayhem.api.OutputMessage;
-import ninja.robbert.mayhem.api.StatusMessage;
-import ninja.robbert.mayhem.api.WelcomeMessage;
+import nl.jdriven.mayhem.behavior.RandomBehavior;
+import nl.jdriven.mayhem.behavior.SendActionsBehavior;
 import nl.jdriven.mayhem.comms.Client;
-import nl.jdriven.mayhem.messages.MsgAdapter;
+import nl.jdriven.mayhem.comms.Postman;
+import nl.jdriven.mayhem.domain.Arena;
+import nl.jdriven.mayhem.subsumption.Arbitrator;
+import nl.jdriven.mayhem.subsumption.Behavior;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Optional;
 
 /**
  *
@@ -17,25 +17,19 @@ public class Main {
     private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws Exception {
-        MsgAdapter adapter = new MsgAdapter();
         Client client = new Client();
+        Arena arena = new Arena();
 
-        String line;
-        while ((line = client.readMessage()) != null) {
-            Optional<OutputMessage> serverMsg = adapter.fromString(line);
+        Postman postman = new Postman(arena, client);
 
-            serverMsg.map(msg -> {
-                if (msg instanceof WelcomeMessage) {
-                    return MsgAdapter.registerMessage();
-                } else if (msg instanceof StatusMessage m) {
-                    LOGGER.info("status: {}", m.getStatus());
-                    return null;
-                } else /* ErrorMessage, AcceptMessage */ {
-                    return null;
-                }
-            }).ifPresent(response -> client.sendMessageImmediate(adapter.toString(response)));
-        }
+        Behavior sendActions = new SendActionsBehavior(arena, client);
+        Behavior randomActions = new RandomBehavior(arena);
 
-        client.closeConnection();
+        Behavior[] behaviors = {randomActions, sendActions};
+        Arbitrator arby = new Arbitrator(behaviors);
+
+        postman.start();
+
+        arby.go();
     }
 }

@@ -29,8 +29,12 @@ public class Client {
         in = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
     }
 
-    public String readMessage() throws IOException {
-        return in.readLine();
+    public String readMessage() {
+        try {
+            return in.readLine();
+        } catch (IOException e) {
+            return null;
+        }
     }
 
     public void sendMessageImmediate(String msg) {

@@ -31,11 +31,6 @@
     </properties>
 
     <repositories>
-        <!--        <repository>
-                    <id>mayhem-api</id>
-                    <name>Mayhem API</name>
-                    <url>https://robbert1:${accessToken}@maven.pkg.github.com/Robbert1/mayhem-api</url>
-                </repository>-->
         <repository>
             <id>central</id>
             <url>https://repo1.maven.org/maven2</url>
@@ -47,19 +42,11 @@
     </repositories>
 
     <dependencies>
-
         <dependency>
             <groupId>com.github.Robbert1</groupId>
             <artifactId>mayhem-api</artifactId>
             <version>1.1.0</version>
         </dependency>
-        <!--
-                <dependency>
-                    <groupId>ninja.robbert.mayhem</groupId>
-                    <artifactId>mayhem-api</artifactId>
-                    <version>1.1.0</version>
-                </dependency>
-        -->
 
         <!-- Test dependencies -->
         <dependency>
@@ -104,6 +91,10 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>one.util</groupId>
+            <artifactId>streamex</artifactId>
         </dependency>
     </dependencies>
 
