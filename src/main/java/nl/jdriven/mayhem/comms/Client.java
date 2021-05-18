@@ -18,9 +18,13 @@ public class Client {
     private Socket clientSocket;
 
     public Client() throws IOException {
-        LOGGER.info("Connecting to {}:{}", Config.HOST, Config.PORT);
+        this(Config.HOST, Config.PORT);
+    }
 
-        clientSocket = new Socket(Config.HOST, Config.PORT);
+    public Client(String host, int port) throws IOException {
+        LOGGER.info("Connecting to {}:{}", host, port);
+
+        clientSocket = new Socket(host, port);
         clientSocket.setKeepAlive(true);
 
         LOGGER.info("Connection status: {}", clientSocket.isConnected());
@@ -38,18 +42,18 @@ public class Client {
     }
 
     public void sendMessageImmediate(String msg) {
-        LOGGER.info("Flushing msg: {}", msg);
+        LOGGER.trace("Sending msg: {}", msg);
         out.println(msg);
         out.flush();
     }
 
     public void bufferMessage(String msg) {
-        LOGGER.info("Buffering msg: {}", msg);
+        LOGGER.trace("Buffering msg: {}", msg);
         out.println(msg);
     }
 
     public void flushToServer() {
-        LOGGER.info("Flushing messages");
+        LOGGER.trace("Sending buffered messages");
         out.flush();
     }
 

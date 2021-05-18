@@ -7,12 +7,14 @@ import nl.jdriven.mayhem.subsumption.Behavior;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class SendActionsBehavior implements Behavior {
+public final class SendActionsBehavior implements Behavior {
+    private final long TIMEOUT = 10L;
     private final Logger logger = LoggerFactory.getLogger(SendActionsBehavior.class);
+    private boolean suppressed;
+
     private final Arena arena;
     private final Client client;
     private final MsgAdapter adapter = new MsgAdapter();
-    private boolean suppressed;
 
     public SendActionsBehavior(Arena arena, Client client) {
         this.arena = arena;
@@ -29,17 +31,17 @@ public class SendActionsBehavior implements Behavior {
         this.suppressed = false;
 
         if (!suppressed) {
-            logger.info("sending {} actions", arena.nextActions.size());
+            logger.debug("sending {} actions", arena.nextActions.size());
             while (!arena.nextActions.isEmpty()) {
                 var msg = adapter.toString(arena.nextActions.pop());
 
-                logger.debug("< {}", msg);
+                logger.info("<A {}", msg);
                 client.bufferMessage(msg);
             }
             client.flushToServer();
 
             try {
-                Thread.sleep(10);
+                Thread.sleep(TIMEOUT);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

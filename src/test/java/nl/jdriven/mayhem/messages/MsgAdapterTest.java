@@ -4,6 +4,7 @@ import ninja.robbert.mayhem.api.ActionMessage;
 import ninja.robbert.mayhem.api.RegisterMessage;
 import ninja.robbert.mayhem.api.StatusMessage;
 import ninja.robbert.mayhem.api.WelcomeMessage;
+import nl.jdriven.mayhem.domain.Arena;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -14,9 +15,12 @@ class MsgAdapterTest {
 
     @Test
     void test() {
-        var inputMessage = MsgAdapter.registerMessage();
+        var inputMessage = new Arena().registerMessage();
 
-        assertThat(inputMessage).isEqualTo(new RegisterMessage("FOobAr", "sander.smeman@jdriven.com", "yadda-yadda"));
+        assertThat(inputMessage)
+            .usingRecursiveComparison()
+            .ignoringFields("password")
+            .isEqualTo(new RegisterMessage("F0obAr", "sander.smeman@jdriven.com", "yadda-yadda"));
     }
 
     @Test

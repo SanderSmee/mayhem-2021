@@ -8,7 +8,6 @@ import nl.jdriven.mayhem.messages.MsgAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.Optional;
 
 public class Postman extends Thread {
@@ -34,20 +33,22 @@ public class Postman extends Thread {
 
             serverMsg
                 .map(msg -> {
-                    if (msg instanceof WelcomeMessage w) {
-                        LOGGER.debug("> {}", finalLine);
-                        return MsgAdapter.registerMessage();
+                    if (msg instanceof WelcomeMessage) {
+                        LOGGER.debug("W> {}", finalLine);
+                        return arena.registerMessage();
                     } else if (msg instanceof StatusMessage m) {
-                        LOGGER.info("> {}, {}", m.getStatus(), finalLine);
+                        LOGGER.info("S> {}, {}", m.getStatus(), finalLine);
                         arena.updateState(m);
-                        return null;
                     } else /* ErrorMessage, AcceptMessage */ {
-                        LOGGER.error("> {}", finalLine);
-                        return null;
+                        LOGGER.error("E> {}", finalLine);
                     }
+                    return null;
                 })
-                .ifPresent(msg ->
-                    this.client.sendMessageImmediate(adapter.toString(msg)));
+                .ifPresent(msg -> {
+                    var json = adapter.toString(msg);
+                    LOGGER.info("<R {}", json);
+                    this.client.sendMessageImmediate(json);
+                });
         }
     }
 }

@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import ninja.robbert.mayhem.api.InputMessage;
 import ninja.robbert.mayhem.api.OutputMessage;
-import ninja.robbert.mayhem.api.RegisterMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +11,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 /**
- *
+ * Adapts messages to single line json strings, and reverse.
  */
 public class MsgAdapter {
     private static final Logger LOGGER = LoggerFactory.getLogger(MsgAdapter.class);
@@ -20,10 +19,6 @@ public class MsgAdapter {
 
     public MsgAdapter() {
         mapper = new ObjectMapper();
-    }
-
-    public static InputMessage registerMessage() {
-        return new RegisterMessage("FOobAr", "sander.smeman@jdriven.com", "yadda-yadda");
     }
 
     public String toString(InputMessage msg) {

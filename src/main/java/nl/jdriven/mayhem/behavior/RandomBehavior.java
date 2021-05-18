@@ -25,12 +25,14 @@ public class RandomBehavior implements Behavior {
 
     @Override
     public boolean takeControl() {
-        return StatusMessage.FightStatus.fighting == arena.currentStatus().getStatus();
+        return
+            StatusMessage.FightStatus.fighting == arena.currentStatus().getStatus()
+                && arena.currentStatus().getYou().stream().anyMatch(Hero::isAlive)
+            ;
     }
 
     @Override
     public void action() {
-        logger.info("Selecting random action(s)");
         var heroes = arena.currentStatus().getYou();
 
         heroes.stream()

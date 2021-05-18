@@ -8,4 +8,7 @@ public final class Skills {
             skill.getEffect() > 0;
     }
 
+    public static boolean isBuff(Hero.Skill skill) {
+        return skill.getDuration() > 0;
+    }
 }

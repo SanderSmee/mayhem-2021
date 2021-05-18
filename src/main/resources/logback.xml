@@ -8,7 +8,7 @@
         </encoder>
     </appender>
 
-    <logger name="nl.jdriven.mayhem" level="debug" additivity="false">
+    <logger name="nl.jdriven.mayhem" level="info" additivity="false">
         <appender-ref ref="STDOUT"/>
     </logger>
 
