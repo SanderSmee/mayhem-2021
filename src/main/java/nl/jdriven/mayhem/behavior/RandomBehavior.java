@@ -19,8 +19,8 @@ public class RandomBehavior implements Behavior {
     private final Logger logger = LoggerFactory.getLogger(RandomBehavior.class);
 
     private final Arena arena;
-    private boolean suppressed;
     private long lastTick = 0L;
+    private boolean suppressed;
 
     public RandomBehavior(Arena arena) {
         this.arena = arena;
@@ -67,7 +67,7 @@ public class RandomBehavior implements Behavior {
 
                 return new ActionMessage(hero.getId(), skill.getId(), target.getId(), false);
             })
-            .forEach(Errors.suppress().wrap(arena.nextActions::offer));
+            .forEach(Errors.suppress().wrap(arena.nextActions::offerLast));
     }
 
     @Override
