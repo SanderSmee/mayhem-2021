@@ -1,5 +1,6 @@
 package nl.jdriven.mayhem.comms;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.images.PullPolicy;
@@ -9,6 +10,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Testcontainers
+@Disabled
 class ClientTest {
 
     @Container
@@ -18,7 +20,7 @@ class ClientTest {
 
     @Test
     void clientCanConnect() throws Exception {
-        var client = new Client(SERVER.getHost(), 1337);
+        var client = new Client(SERVER.getHost(), SERVER.getMappedPort(1337));
 
         assertThat(client).isNotNull();
     }

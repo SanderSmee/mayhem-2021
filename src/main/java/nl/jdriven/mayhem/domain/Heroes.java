@@ -24,4 +24,18 @@ public final class Heroes {
     public static Hero getLegacyDuster(List<Hero> heroes) {
         return getHero("Legacy Duster", heroes);
     }
+
+    public static Hero getSpecificAliveHero(List<Hero> heroes, Hero.Skill skill) {
+        var jhipster = getJHipster(heroes);
+        var ciCdGod = getCiCdGod(heroes);
+        var legacyDuster = getLegacyDuster(heroes);
+
+        return jhipster.isAlive() && !jhipster.getBuffs().containsKey(skill.getName())
+            ? jhipster
+            : (ciCdGod.isAlive() && !ciCdGod.getBuffs().containsKey(skill.getName())
+                ? ciCdGod
+                : legacyDuster.isAlive() && !legacyDuster.getBuffs().containsKey(skill.getName())
+                    ? legacyDuster
+                    : null);
+    }
 }

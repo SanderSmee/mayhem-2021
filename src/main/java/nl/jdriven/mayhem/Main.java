@@ -1,5 +1,6 @@
 package nl.jdriven.mayhem;
 
+import nl.jdriven.mayhem.behavior.PrepareAtReadyBehavior;
 import nl.jdriven.mayhem.behavior.RandomBehavior;
 import nl.jdriven.mayhem.behavior.SendActionsBehavior;
 import nl.jdriven.mayhem.comms.Client;
@@ -16,10 +17,12 @@ public class Main {
         Client client = new Client();
         Arena arena = new Arena();
 
-        Behavior sendActions = new SendActionsBehavior(arena, client);
-        Behavior randomActions = new RandomBehavior(arena);
+        var sendActions = new SendActionsBehavior(arena, client);
+        var prepareAtReadyBehavior = new PrepareAtReadyBehavior(arena);
+        var randomActions = new RandomBehavior(arena);
 
         List<Behavior> behaviors = List.of(
+            prepareAtReadyBehavior,
             randomActions,
             sendActions
         );

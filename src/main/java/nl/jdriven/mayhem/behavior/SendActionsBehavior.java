@@ -1,5 +1,6 @@
 package nl.jdriven.mayhem.behavior;
 
+import ninja.robbert.mayhem.api.StatusMessage;
 import nl.jdriven.mayhem.comms.Client;
 import nl.jdriven.mayhem.domain.Arena;
 import nl.jdriven.mayhem.messages.MsgAdapter;
@@ -23,28 +24,27 @@ public final class SendActionsBehavior implements Behavior {
 
     @Override
     public boolean takeControl() {
-        return !this.arena.nextActions.isEmpty();
+        return
+            StatusMessage.FightStatus.fighting == arena.currentStatus().getStatus()
+            && !this.arena.nextActions.isEmpty();
     }
 
     @Override
     public void action() {
         this.suppressed = false;
 
-        if (!suppressed) {
-            logger.debug("sending {} actions", arena.nextActions.size());
-            while (!arena.nextActions.isEmpty()) {
-                var msg = adapter.toString(arena.nextActions.pop());
+        logger.debug("sending {} actions", arena.nextActions.size());
+        while (!arena.nextActions.isEmpty() && !suppressed) {
+            var msg = arena.nextActions.poll();
 
-                logger.info("<A {}", msg);
-                client.bufferMessage(msg);
+            if (!arena.currentStatus().getYou().get(msg.getHero()).isAlive()) {
+                continue;
             }
-            client.flushToServer();
 
-            try {
-                Thread.sleep(TIMEOUT);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            var json = adapter.toString(msg);
+
+            logger.info("<A {}", json);
+            client.sendMessageImmediate(json);
         }
     }
 

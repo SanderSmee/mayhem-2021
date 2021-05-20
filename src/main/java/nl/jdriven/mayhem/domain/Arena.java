@@ -11,13 +11,13 @@ import java.time.LocalDate;
 import java.util.Deque;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class Arena {
     private final Logger logger = LoggerFactory.getLogger(Arena.class);
-    private final long TIMEOUT = 5L;
     private final String botName;
 
-    private StatusMessage currentStatus = emptyStatus();
+    public final AtomicReference<StatusMessage> atomicState = new AtomicReference<>(emptyStatus());
     public final Deque<ActionMessage> nextActions = new ConcurrentLinkedDeque<>();
 
     public Arena() {
@@ -29,9 +29,9 @@ public class Arena {
     }
 
     public void updateState(StatusMessage input) {
-        this.currentStatus = input;
+        this.atomicState.set(input);
 
-        logger.info("updated current state");
+        logger.trace("updated current state");
     }
 
     StatusMessage emptyStatus() {
@@ -39,10 +39,10 @@ public class Arena {
     }
 
     public InputMessage registerMessage() {
-        return new RegisterMessage(botName, "sander@mayhem.com", "yadda-barf-%s".formatted(LocalDate.now()));
+        return new RegisterMessage(botName, "sander.smeman@jdriven.com", "yadda-barf-%s".formatted(LocalDate.now()));
     }
 
     public StatusMessage currentStatus() {
-        return this.currentStatus;
+        return atomicState.get();
     }
 }

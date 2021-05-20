@@ -1,5 +1,6 @@
 package nl.jdriven.mayhem.comms;
 
+import ninja.robbert.mayhem.api.AcceptMessage;
 import ninja.robbert.mayhem.api.OutputMessage;
 import ninja.robbert.mayhem.api.StatusMessage;
 import ninja.robbert.mayhem.api.WelcomeMessage;
@@ -39,6 +40,8 @@ public class Postman extends Thread {
                     } else if (msg instanceof StatusMessage m) {
                         LOGGER.info("S> {}, {}", m.getStatus(), finalLine);
                         arena.updateState(m);
+                    } else if (msg instanceof AcceptMessage) {
+                        LOGGER.info("A> {}", finalLine);
                     } else /* ErrorMessage, AcceptMessage */ {
                         LOGGER.error("E> {}", finalLine);
                     }
