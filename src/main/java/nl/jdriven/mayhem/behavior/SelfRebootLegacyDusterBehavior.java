@@ -1,5 +1,6 @@
 package nl.jdriven.mayhem.behavior;
 
+import com.diffplug.common.base.Errors;
 import ninja.robbert.mayhem.api.ActionMessage;
 import ninja.robbert.mayhem.api.Hero;
 import ninja.robbert.mayhem.api.StatusMessage;
@@ -34,8 +35,8 @@ public class SelfRebootLegacyDusterBehavior implements Behavior {
         var legacyDuster = Heroes.getLegacyDuster(arena.currentStatus().getYou());
         var reboot = Skills.get("reboot", legacyDuster.getSkills());
 
-        if (legacyDuster.isAlive() && legacyDuster.getCooldowns().containsKey(reboot.getId())) {
-            arena.nextActions.offerFirst(new ActionMessage(legacyDuster.getId(), reboot.getId(), legacyDuster.getId(), true));
+        if (legacyDuster.isAlive() && Heroes.canExecute(legacyDuster, reboot)) {
+            Errors.suppress().getWithDefault(() -> arena.nextActions.offerFirst(new ActionMessage(legacyDuster.getId(), reboot.getId(), legacyDuster.getId(), true)), false);
         }
     }
 

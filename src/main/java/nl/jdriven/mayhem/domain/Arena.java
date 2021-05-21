@@ -1,7 +1,6 @@
 package nl.jdriven.mayhem.domain;
 
 import ninja.robbert.mayhem.api.ActionMessage;
-import ninja.robbert.mayhem.api.Hero;
 import ninja.robbert.mayhem.api.InputMessage;
 import ninja.robbert.mayhem.api.RegisterMessage;
 import ninja.robbert.mayhem.api.StatusMessage;
@@ -22,7 +21,7 @@ public class Arena {
     public final Deque<ActionMessage> nextActions = new LinkedBlockingDeque<>(100);
 
     public Arena() {
-        this("F0obAr");
+        this("T-1000");
     }
 
     public Arena(String bot) {
@@ -41,7 +40,7 @@ public class Arena {
     }
 
     public InputMessage registerMessage() {
-        return new RegisterMessage(botName, "sander.smeman@jdriven.com", "yadda-barf-%s".formatted(LocalDate.now()));
+        return new RegisterMessage(botName, "sander.smeman+brutal@jdriven.com", "yadda-barf-%s".formatted(LocalDate.now()));
     }
 
     public StatusMessage currentStatus() {

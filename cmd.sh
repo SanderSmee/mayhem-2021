@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-mvn clean verify
+mvn clean verify -DskipTests
 
 while true
 do
   date
-  echo "Running framboos"
+  echo "Running Mayhem!"
   ! time java -Djava.security.egd=file:/dev/./urandom -XX:+UseG1GC -noverify -Djava.awt.headless=true -jar target/mayhem-jar-with-dependencies.jar
 done

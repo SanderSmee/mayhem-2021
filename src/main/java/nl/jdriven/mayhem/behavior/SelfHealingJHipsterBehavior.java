@@ -1,5 +1,6 @@
 package nl.jdriven.mayhem.behavior;
 
+import com.diffplug.common.base.Errors;
 import ninja.robbert.mayhem.api.ActionMessage;
 import ninja.robbert.mayhem.api.StatusMessage;
 import nl.jdriven.mayhem.domain.Arena;
@@ -34,8 +35,8 @@ public class SelfHealingJHipsterBehavior implements Behavior {
         var jhipster = Heroes.getJHipster(arena.currentStatus().getYou());
         var meditation = Skills.get("meditation", jhipster.getSkills());
 
-        if (jhipster.isAlive() && jhipster.getCooldowns().containsKey(meditation.getId())) {
-            arena.nextActions.offerFirst(new ActionMessage(jhipster.getId(), meditation.getId(), jhipster.getId(), true));
+        if (jhipster.isAlive() && Heroes.canExecute(jhipster, meditation)) {
+            Errors.suppress().getWithDefault(() -> arena.nextActions.offerFirst(new ActionMessage(jhipster.getId(), meditation.getId(), jhipster.getId(), true)), false);
         }
     }
 

@@ -3,7 +3,9 @@ package nl.jdriven.mayhem.domain;
 import ninja.robbert.mayhem.api.Hero;
 import nl.jdriven.mayhem.util.Streams;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public final class Heroes {
 
@@ -37,5 +39,22 @@ public final class Heroes {
                 : legacyDuster.isAlive() && !legacyDuster.getBuffs().containsKey(skill.getName())
                     ? legacyDuster
                     : null);
+    }
+
+    public static boolean canExecute(Hero hero, String skill) {
+        var theSkill = Skills.get(skill, hero);
+
+        return canExecute(hero, theSkill);
+    }
+
+    public static boolean canExecute(Hero hero, Hero.Skill theSkill) {
+        return
+            !hero.isBusy()
+            && !hero.getCooldowns().containsKey(theSkill.getId())
+            && (theSkill.getPower() > 0 || -theSkill.getPower() < hero.getPower());
+    }
+
+    public static List<Hero> living(List<Hero> heroes) {
+        return heroes.stream().filter(Hero::isAlive).collect(Collectors.toList());
     }
 }

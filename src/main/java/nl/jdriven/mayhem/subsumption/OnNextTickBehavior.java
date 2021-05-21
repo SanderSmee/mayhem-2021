@@ -3,11 +3,11 @@ package nl.jdriven.mayhem.subsumption;
 import nl.jdriven.mayhem.domain.Arena;
 
 public abstract class OnNextTickBehavior implements Behavior {
-    private final Arena arena;
+    protected final Arena arena;
     protected long lastTick = 0L;
     protected boolean suppressed;
 
-    protected OnNextTickBehavior(Arena arena) {
+    public OnNextTickBehavior(Arena arena) {
         this.arena = arena;
     }
 
@@ -18,7 +18,7 @@ public abstract class OnNextTickBehavior implements Behavior {
             && canTakeControl();
     }
 
-    abstract boolean canTakeControl();
+    public abstract boolean canTakeControl();
 
     @Override
     public void action() {
@@ -27,7 +27,7 @@ public abstract class OnNextTickBehavior implements Behavior {
         this.doAction();
     }
 
-    abstract void doAction();
+    public abstract void doAction();
 
     @Override
     public void suppress() {

@@ -1,5 +1,6 @@
 package nl.jdriven.mayhem.behavior;
 
+import com.diffplug.common.base.Errors;
 import ninja.robbert.mayhem.api.ActionMessage;
 import ninja.robbert.mayhem.api.Hero;
 import ninja.robbert.mayhem.api.StatusMessage;
@@ -36,8 +37,8 @@ public class SelfPowerUpCiCdBehavior implements Behavior {
         var greenfield = Skills.get("greenfield", ciCdGod.getSkills());
 
 
-        if (ciCdGod.isAlive() && ciCdGod.getCooldowns().containsKey(greenfield.getId())) {
-            arena.nextActions.offerFirst(new ActionMessage(ciCdGod.getId(), greenfield.getId(), ciCdGod.getId(), true));
+        if (ciCdGod.isAlive() && Heroes.canExecute(ciCdGod, greenfield)) {
+            Errors.suppress().getWithDefault(() -> arena.nextActions.offerFirst(new ActionMessage(ciCdGod.getId(), greenfield.getId(), ciCdGod.getId(), true)), false);
         }
     }
 

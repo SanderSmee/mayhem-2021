@@ -9,6 +9,9 @@ import nl.jdriven.mayhem.messages.MsgAdapter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.Clock;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 
 public class Postman extends Thread {
@@ -53,5 +56,15 @@ public class Postman extends Thread {
                     this.client.sendMessageImmediate(json);
                 });
         }
+    }
+
+    private void syncTime(WelcomeMessage message) {
+        var systemClock = Clock.systemDefaultZone();
+
+        var diff = message.getTimestamp().getTime() - systemClock.millis();
+
+        LOGGER.warn("Adjusting clock {} with {} millis", systemClock, diff);
+
+        var adjusted = Clock.offset(systemClock, Duration.of(diff, ChronoUnit.MILLIS));
     }
 }

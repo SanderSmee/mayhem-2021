@@ -6,6 +6,8 @@ import nl.jdriven.mayhem.behavior.SelfHealingJHipsterBehavior;
 import nl.jdriven.mayhem.behavior.SelfPowerUpCiCdBehavior;
 import nl.jdriven.mayhem.behavior.SelfRebootLegacyDusterBehavior;
 import nl.jdriven.mayhem.behavior.SendActionsBehavior;
+import nl.jdriven.mayhem.behavior.TeamCounterEjbejbejbBehavior;
+import nl.jdriven.mayhem.behavior.TeamCounterMulticloudBehavior;
 import nl.jdriven.mayhem.comms.Client;
 import nl.jdriven.mayhem.domain.Arena;
 import nl.jdriven.mayhem.subsumption.Behavior;
@@ -26,7 +28,11 @@ public class Main {
 
         List<Behavior> behaviors = List.of(
             prepareAtReadyBehavior,
+//            new AttackMulticloudBehavior(arena),
+//            new AttackPlsqlBehavior(arena),
             randomActions,
+            new TeamCounterEjbejbejbBehavior(arena),
+            new TeamCounterMulticloudBehavior(arena),
             new SelfPowerUpCiCdBehavior(arena),
             new SelfRebootLegacyDusterBehavior(arena),
             new SelfHealingJHipsterBehavior(arena),

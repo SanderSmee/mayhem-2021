@@ -32,6 +32,7 @@ public class RandomBehavior implements Behavior {
             StatusMessage.FightStatus.fighting == arena.currentStatus().getStatus()
                 && arena.currentStatus().getTimestamp().getTime() > lastTick
                 && arena.currentStatus().getYou().stream().anyMatch(Hero::isAlive)
+                && arena.nextActions.isEmpty()
             ;
     }
 
@@ -46,10 +47,8 @@ public class RandomBehavior implements Behavior {
             .filter(Hero::isAlive)
             .filter(Predicate.not(Hero::isBusy))
             .map(hero -> {
-                var coolingDown = hero.getCooldowns().keySet();
                 var applicableSkills = hero.getSkills().stream()
-                    .filter(skill -> !coolingDown.contains(skill.getId()))
-                    .filter(skill -> -skill.getPower() < hero.getPower())
+                    .filter(skill -> Heroes.canExecute(hero, skill))
                     .collect(Collectors.toList());
                 var skill = Randoms.randomFrom(applicableSkills);
 

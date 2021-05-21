@@ -36,6 +36,10 @@ public final class Skills {
 
     }
 
+    public static Hero.Skill get(String name, Hero hero) {
+        return get(name, hero.getSkills());
+    }
+
     public static Hero pickTarget(Hero.Skill skill, Hero owner, List<Hero> heroes) {
         return Hero.Skill.AllowedTarget.self == skill.getAllowedTarget()
             ? owner
