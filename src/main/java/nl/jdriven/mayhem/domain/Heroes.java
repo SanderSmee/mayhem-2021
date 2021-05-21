@@ -57,4 +57,8 @@ public final class Heroes {
     public static List<Hero> living(List<Hero> heroes) {
         return heroes.stream().filter(Hero::isAlive).collect(Collectors.toList());
     }
+
+    public static boolean is(Hero hero, String name) {
+        return name.equals(hero.getName());
+    }
 }

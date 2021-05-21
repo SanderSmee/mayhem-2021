@@ -1,6 +1,6 @@
 package nl.jdriven.mayhem.behavior;
 
-import ninja.robbert.mayhem.api.StatusMessage;
+import ninja.robbert.mayhem.api.StatusMessage.FightStatus;
 import nl.jdriven.mayhem.comms.Client;
 import nl.jdriven.mayhem.domain.Arena;
 import nl.jdriven.mayhem.messages.MsgAdapter;
@@ -8,8 +8,9 @@ import nl.jdriven.mayhem.subsumption.Behavior;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.EnumSet;
+
 public final class SendActionsBehavior implements Behavior {
-    private final long TIMEOUT = 10L;
     private final Logger logger = LoggerFactory.getLogger(SendActionsBehavior.class);
     private boolean suppressed;
 
@@ -25,7 +26,7 @@ public final class SendActionsBehavior implements Behavior {
     @Override
     public boolean takeControl() {
         return
-            StatusMessage.FightStatus.fighting == arena.currentStatus().getStatus()
+            EnumSet.of(FightStatus.fighting, FightStatus.overtime).contains(arena.currentStatus().getStatus())
             && !this.arena.nextActions.isEmpty();
     }
 

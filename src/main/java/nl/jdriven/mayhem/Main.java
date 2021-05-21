@@ -1,5 +1,6 @@
 package nl.jdriven.mayhem;
 
+import nl.jdriven.mayhem.behavior.OverTimeBehavior;
 import nl.jdriven.mayhem.behavior.PrepareAtReadyBehavior;
 import nl.jdriven.mayhem.behavior.RandomBehavior;
 import nl.jdriven.mayhem.behavior.SelfHealingJHipsterBehavior;
@@ -36,6 +37,7 @@ public class Main {
             new SelfPowerUpCiCdBehavior(arena),
             new SelfRebootLegacyDusterBehavior(arena),
             new SelfHealingJHipsterBehavior(arena),
+            new OverTimeBehavior(arena),
             sendActions
         );
 
