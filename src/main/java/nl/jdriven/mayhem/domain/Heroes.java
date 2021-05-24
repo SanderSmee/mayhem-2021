@@ -3,7 +3,6 @@ package nl.jdriven.mayhem.domain;
 import ninja.robbert.mayhem.api.Hero;
 import nl.jdriven.mayhem.util.Streams;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 

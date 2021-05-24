@@ -56,15 +56,13 @@ public class RandomBehavior implements Behavior {
                     return null;
                 }
 
-                Hero target = Skills.isNegative(skill)
-                    ? Heroes.getSpecificAliveHero(enemies, skill)
-                    : Skills.pickTarget(skill, hero, heroes);
+                var target = Skills.isNegative(skill)
+                    ? Skills.applicableEnemy(skill, enemies)
+                    : Skills.applicableHero(skill, hero, heroes);
 
-                if (target == null) {
-                    return null;
-                }
-
-                return new ActionMessage(hero.getId(), skill.getId(), target.getId(), false);
+                return target
+                    .map(t -> new ActionMessage(hero.getId(), skill.getId(), t.getId(), false))
+                    .orElse(null);
             })
             .forEach(Errors.suppress().wrap(arena.nextActions::offerLast));
     }
