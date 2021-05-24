@@ -1,5 +1,6 @@
 package nl.jdriven.mayhem.behavior;
 
+import com.diffplug.common.base.Errors;
 import ninja.robbert.mayhem.api.ActionMessage;
 import ninja.robbert.mayhem.api.Hero;
 import ninja.robbert.mayhem.api.StatusMessage;
@@ -31,23 +32,30 @@ public class OverTimeBehavior extends OnNextTickBehavior {
         arena.currentStatus().getYou().stream()
             .filter(Hero::isAlive)
             .forEach(hero -> {
-                if (Heroes.is(hero, "CI/CD god")) {
-                    var skill = Skills.get("yamlize", hero);
-                    var canDo = Heroes.canExecute(hero, skill);
+                final Hero.Skill skill;
+                final Hero target;
 
-                    if (canDo) { arena.nextActions.offerFirst(new ActionMessage(hero.getId(), skill.getId(), Randoms.randomFrom(enemies).getId(), true)); }
+                switch (hero.getName()) {
+                    case "CI/CD god" -> {
+                        skill = Skills.get("yamlize", hero);
+                        target = Randoms.randomFrom(enemies);
+                    }
+                    case "Legacy Duster" -> {
+                        skill = Skills.get("PL/SQL Hell", hero);
+                        target = Randoms.randomFrom(enemies);
+                    }
+                    case "JHipster" -> {
+                        skill = Skills.get("yogaclass", hero);
+                        target = Randoms.randomFrom(Heroes.living(arena.currentStatus().getYou()));
+                    }
+                    default -> {
+                        skill = null;
+                        target = null;
+                    }
                 }
-                if (Heroes.is(hero, "Legacy Duster")) {
-                    var skill = Skills.get("PL/SQL Hell", hero);
-                    var canDo = Heroes.canExecute(hero, skill);
 
-                    if (canDo) { arena.nextActions.offerFirst(new ActionMessage(hero.getId(), skill.getId(), Randoms.randomFrom(enemies).getId(), true)); }
-                }
-                if (Heroes.is(hero, "JHipster")) {
-                    var skill = Skills.get("yogaclass", hero);
-                    var canDo = Heroes.canExecute(hero, skill);
-
-                    if (canDo) { arena.nextActions.offerFirst(new ActionMessage(hero.getId(), skill.getId(), Randoms.randomFrom(Heroes.living(arena.currentStatus().getYou())).getId(), true)); }
+                if (skill != null && target != null && Heroes.canExecute(hero, skill)) {
+                    Errors.suppress().getWithDefault(() -> arena.nextActions.offerFirst(new ActionMessage(hero.getId(), skill.getId(), target.getId(), true)), false);
                 }
             });
     }

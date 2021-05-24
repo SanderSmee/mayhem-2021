@@ -49,13 +49,8 @@ public class PrepareAtReadyBehavior implements Behavior {
 
         var actions = Arrays.asList(
             new ActionMessage(Heroes.getCiCdGod(heroes).getId(), multicloud.getId(), Heroes.getJHipster(enemies).getId(), false),
-//            new ActionMessage(Heroes.getCiCdGod(heroes).getId(), infraascode.getId(), Heroes.getCiCdGod(heroes).getId(), false),
-
             new ActionMessage(Heroes.getJHipster(heroes).getId(), kotlin.getId(), Heroes.getJHipster(heroes).getId(), false),
-//            new ActionMessage(Heroes.getJHipster(heroes).getId(), glasses.getId(), Heroes.getCiCdGod(heroes).getId(), false),
-
-            new ActionMessage(Heroes.getLegacyDuster(heroes).getId(), ejbejbejb.getId(), Heroes.getLegacyDuster(enemies).getId(), false)
-//            new ActionMessage(Heroes.getLegacyDuster(heroes).getId(), reboot.getId(), Heroes.getCiCdGod(heroes).getId(), false)
+            new ActionMessage(Heroes.getLegacyDuster(heroes).getId(), ejbejbejb.getId(), Heroes.getJHipster(enemies).getId(), false)
         );
 
         arena.nextActions.addAll(actions);
