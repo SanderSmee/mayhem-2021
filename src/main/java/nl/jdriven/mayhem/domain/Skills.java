@@ -8,7 +8,7 @@ import java.util.Optional;
 
 import static java.util.Comparator.comparingInt;
 import static java.util.function.Predicate.not;
-import static nl.jdriven.mayhem.domain.Heroes.getSpecificAliveHero;
+import static nl.jdriven.mayhem.domain.Heroes.getSpecificHeroIfLiving;
 import static nl.jdriven.mayhem.domain.Heroes.hasBuff;
 
 public final class Skills {
@@ -53,20 +53,28 @@ public final class Skills {
     }
 
     protected static Optional<Hero> applicableHero(Hero.Skill skill, List<Hero> heroes) {
+        var heroesWithoutSkillInBuff = heroes.stream()
+            .filter(Hero::isAlive)
+            .filter(not(hero -> hasBuff(hero, skill)));
+
         return switch (skill.getType()) {
-            case health: yield Optional.ofNullable(getSpecificAliveHero(heroes.stream().filter(not(hero -> hasBuff(hero, skill))).toList(), skill));
-            case resistance: yield heroes.stream().filter(Hero::isAlive).filter(not(hero -> hasBuff(hero, skill))).min(comparingInt(Hero::getResistance));
-            case armor: yield heroes.stream().filter(Hero::isAlive).filter(not(hero -> hasBuff(hero, skill))).min(comparingInt(Hero::getArmor));
-            case power: yield heroes.stream().filter(Hero::isAlive).filter(not(hero -> hasBuff(hero, skill))).min(comparingInt(Hero::getPower));
+            case health: yield heroesWithoutSkillInBuff.filter(Heroes::needsHealing).min(comparingInt(Hero::getHealth));
+            case resistance: yield heroesWithoutSkillInBuff.min(comparingInt(Hero::getResistance));
+            case armor: yield heroesWithoutSkillInBuff.min(comparingInt(Hero::getArmor));
+            case power: yield heroesWithoutSkillInBuff.min(comparingInt(Hero::getPower));
         };
     }
 
     public static Optional<Hero> applicableEnemy(Hero.Skill skill, List<Hero> enemies) {
+        var enemiesWithoutSkillInBuff = enemies.stream()
+            .filter(Hero::isAlive)
+            .filter(not(hero -> hasBuff(hero, skill)));
+
         return switch (skill.getType()) {
-            case health: yield Optional.ofNullable(getSpecificAliveHero(enemies.stream().filter(not(hero -> hasBuff(hero, skill))).toList(), skill));
-            case resistance: yield enemies.stream().filter(e -> e.isAlive() && e.getResistance() > 0).filter(not(hero -> hasBuff(hero, skill))).max(comparingInt(Hero::getResistance));
-            case armor: yield enemies.stream().filter(e -> e.isAlive() && e.getArmor() > 0).filter(not(hero -> hasBuff(hero, skill))).max(comparingInt(Hero::getArmor));
-            case power: yield enemies.stream().filter(e -> e.isAlive() && e.getPower() > 0).filter(not(hero -> hasBuff(hero, skill))).max(comparingInt(Hero::getPower));
+            case health: yield getSpecificHeroIfLiving(enemiesWithoutSkillInBuff.toList());
+            case resistance: yield enemiesWithoutSkillInBuff.filter(e -> e.getResistance() > 0).max(comparingInt(Hero::getResistance));
+            case armor: yield enemiesWithoutSkillInBuff.filter(e -> e.getArmor() > 0).max(comparingInt(Hero::getArmor));
+            case power: yield enemiesWithoutSkillInBuff.filter(e -> e.getPower() > 0).max(comparingInt(Hero::getPower));
         };
     }
 }

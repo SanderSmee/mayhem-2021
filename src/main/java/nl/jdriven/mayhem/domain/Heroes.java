@@ -4,6 +4,7 @@ import ninja.robbert.mayhem.api.Hero;
 import nl.jdriven.mayhem.util.Streams;
 
 import java.util.List;
+import java.util.Optional;
 
 public final class Heroes {
 
@@ -25,18 +26,23 @@ public final class Heroes {
         return getHero("Legacy Duster", heroes);
     }
 
-    public static Hero getSpecificAliveHero(List<Hero> heroes, Hero.Skill skill) {
+    /**
+     * Get living hero in order JHipster > CiCd God > Legacy Duster.
+     * @param heroes
+     * @return
+     */
+    public static Optional<Hero> getSpecificHeroIfLiving(List<Hero> heroes) {
         var jhipster = getJHipster(heroes);
         var ciCdGod = getCiCdGod(heroes);
         var legacyDuster = getLegacyDuster(heroes);
 
-        return jhipster.isAlive() && !hasBuff(jhipster, skill)
-            ? jhipster
-            : (ciCdGod.isAlive() && !hasBuff(ciCdGod, skill)
-                ? ciCdGod
-                : legacyDuster.isAlive() && !hasBuff(legacyDuster, skill)
-                    ? legacyDuster
-                    : null);
+        return jhipster.isAlive()
+            ? Optional.of(jhipster)
+            : ciCdGod.isAlive()
+                ? Optional.of(ciCdGod)
+                : legacyDuster.isAlive()
+                    ? Optional.of(legacyDuster)
+                    : Optional.empty();
     }
 
     public static boolean canExecute(Hero hero, Hero.Skill theSkill) {
@@ -56,5 +62,12 @@ public final class Heroes {
 
     public static boolean hasBuff(Hero hero, Hero.Skill skill) {
         return hero.getBuffs().containsKey(skill.getName());
+    }
+
+    public static boolean needsHealing(Hero hero) {
+        return
+            hero.isAlive()
+            && hero.getHealth() < hero.getMaxHealth()
+            && (float) hero.getHealth() / hero.getMaxHealth() < .81f;
     }
 }

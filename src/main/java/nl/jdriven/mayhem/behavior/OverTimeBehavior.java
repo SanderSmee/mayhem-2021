@@ -57,8 +57,9 @@ public class OverTimeBehavior extends OnNextTickBehavior {
                 }
 
                 target.ifPresent(t -> {
-                    if (Heroes.canExecute(t, skill))
-                    Errors.suppress().getWithDefault(() -> arena.nextActions.offerFirst(new ActionMessage(hero.getId(), skill.getId(), t.getId(), true)), false);
+                    if (Heroes.canExecute(t, skill)) {
+                        Errors.suppress().getWithDefault(() -> arena.nextActions.offerFirst(new ActionMessage(hero.getId(), skill.getId(), t.getId(), false)), false);
+                    }
                 });
             });
     }

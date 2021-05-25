@@ -24,6 +24,7 @@ public abstract class OnNextTickBehavior implements Behavior {
     @Override
     public void action() {
         this.lastTick = arena.currentStatus().getTimestamp().getTime();
+        this.suppressed = false;
 
         this.doAction();
     }
