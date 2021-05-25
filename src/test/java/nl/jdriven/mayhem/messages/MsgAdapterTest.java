@@ -20,7 +20,7 @@ class MsgAdapterTest {
         assertThat(inputMessage)
             .usingRecursiveComparison()
             .ignoringFields("password")
-            .isEqualTo(new RegisterMessage("F0obAr", "sander.smeman@jdriven.com", "yadda-yadda"));
+            .isEqualTo(new RegisterMessage("T-1000", "sander.smeman+brutal@jdriven.com", "yadda-yadda"));
     }
 
     @Test

@@ -10,6 +10,9 @@ import nl.jdriven.mayhem.domain.Skills;
 import nl.jdriven.mayhem.subsumption.OnNextTickBehavior;
 import nl.jdriven.mayhem.util.Randoms;
 
+import java.util.Comparator;
+import java.util.Optional;
+
 public class OverTimeBehavior extends OnNextTickBehavior {
 
     public OverTimeBehavior(Arena arena) {
@@ -28,35 +31,37 @@ public class OverTimeBehavior extends OnNextTickBehavior {
         arena.nextActions.clear();
 
         var enemies = Heroes.living(arena.currentStatus().getOpponent());
+        var heroes = Heroes.living(arena.currentStatus().getYou());
 
         arena.currentStatus().getYou().stream()
             .filter(Hero::isAlive)
             .forEach(hero -> {
                 final Hero.Skill skill;
-                final Hero target;
+                final Optional<Hero> target;
 
                 switch (hero.getName()) {
                     case "CI/CD god" -> {
                         skill = Skills.get("yamlize", hero);
-                        target = Randoms.randomFrom(enemies);
+                        target = enemies.stream().filter(Hero::isAlive).max(Comparator.comparingInt(Hero::getHealth));
                     }
                     case "Legacy Duster" -> {
                         skill = Skills.get("PL/SQL Hell", hero);
-                        target = Randoms.randomFrom(enemies);
+                        target = enemies.stream().filter(Hero::isAlive).max(Comparator.comparingInt(Hero::getHealth));
                     }
                     case "JHipster" -> {
                         skill = Skills.get("yogaclass", hero);
-                        target = Randoms.randomFrom(Heroes.living(arena.currentStatus().getYou()));
+                        target = heroes.stream().filter(Hero::isAlive).max(Comparator.comparingInt(Hero::getHealth));
                     }
                     default -> {
                         skill = null;
-                        target = null;
+                        target = Optional.empty();
                     }
                 }
 
-                if (skill != null && target != null && Heroes.canExecute(hero, skill)) {
-                    Errors.suppress().getWithDefault(() -> arena.nextActions.offerFirst(new ActionMessage(hero.getId(), skill.getId(), target.getId(), true)), false);
-                }
+                target.ifPresent(t -> {
+                    if (Heroes.canExecute(t, skill))
+                    Errors.suppress().getWithDefault(() -> arena.nextActions.offerFirst(new ActionMessage(hero.getId(), skill.getId(), t.getId(), true)), false);
+                });
             });
     }
 }
