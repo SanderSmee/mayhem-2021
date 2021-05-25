@@ -1,9 +1,9 @@
 package nl.jdriven.mayhem.behavior;
 
 import com.diffplug.common.base.Errors;
-import ninja.robbert.mayhem.api.ActionMessage;
 import ninja.robbert.mayhem.api.Hero;
 import ninja.robbert.mayhem.api.StatusMessage;
+import nl.jdriven.mayhem.domain.Action;
 import nl.jdriven.mayhem.domain.Arena;
 import nl.jdriven.mayhem.domain.Heroes;
 import nl.jdriven.mayhem.domain.Skills;
@@ -58,7 +58,7 @@ public class OverTimeBehavior extends OnNextTickBehavior {
 
                 target.ifPresent(t -> {
                     if (Heroes.canExecute(t, skill)) {
-                        Errors.suppress().getWithDefault(() -> arena.nextActions.offerFirst(new ActionMessage(hero.getId(), skill.getId(), t.getId(), false)), false);
+                        Errors.suppress().getWithDefault(() -> arena.nextActions.offerFirst(new Action(hero, skill, t, false)), false);
                     }
                 });
             });

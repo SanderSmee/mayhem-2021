@@ -1,6 +1,5 @@
 package nl.jdriven.mayhem.domain;
 
-import ninja.robbert.mayhem.api.ActionMessage;
 import ninja.robbert.mayhem.api.InputMessage;
 import ninja.robbert.mayhem.api.RegisterMessage;
 import ninja.robbert.mayhem.api.StatusMessage;
@@ -18,7 +17,7 @@ public class Arena {
     private final String botName;
 
     public final AtomicReference<StatusMessage> atomicState = new AtomicReference<>(emptyStatus());
-    public final Deque<ActionMessage> nextActions = new LinkedBlockingDeque<>(100);
+    public final Deque<Action> nextActions = new LinkedBlockingDeque<>(100);
 
     public Arena() {
         this("T-1000");

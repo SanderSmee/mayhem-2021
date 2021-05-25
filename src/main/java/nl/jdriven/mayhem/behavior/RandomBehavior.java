@@ -1,9 +1,9 @@
 package nl.jdriven.mayhem.behavior;
 
 import com.diffplug.common.base.Errors;
-import ninja.robbert.mayhem.api.ActionMessage;
 import ninja.robbert.mayhem.api.Hero;
 import ninja.robbert.mayhem.api.StatusMessage;
+import nl.jdriven.mayhem.domain.Action;
 import nl.jdriven.mayhem.domain.Arena;
 import nl.jdriven.mayhem.domain.Heroes;
 import nl.jdriven.mayhem.domain.Skills;
@@ -60,7 +60,7 @@ public class RandomBehavior implements Behavior {
                     : Skills.applicableHero(skill, hero, heroes);
 
                 return target
-                    .map(t -> new ActionMessage(hero.getId(), skill.getId(), t.getId(), false))
+                    .map(t -> new Action(hero, skill, t, false))
                     .orElse(null);
             })
             .forEach(Errors.suppress().wrap(arena.nextActions::offerLast));

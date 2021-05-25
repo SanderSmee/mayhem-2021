@@ -1,19 +1,15 @@
 package nl.jdriven.mayhem.behavior;
 
-import ninja.robbert.mayhem.api.ActionMessage;
-import ninja.robbert.mayhem.api.Hero;
 import ninja.robbert.mayhem.api.StatusMessage;
+import nl.jdriven.mayhem.domain.Action;
 import nl.jdriven.mayhem.domain.Arena;
 import nl.jdriven.mayhem.domain.Heroes;
 import nl.jdriven.mayhem.domain.Skills;
 import nl.jdriven.mayhem.subsumption.Behavior;
-import nl.jdriven.mayhem.util.Randoms;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.function.Predicate;
 
 public class PrepareAtReadyBehavior implements Behavior {
     private final Logger logger = LoggerFactory.getLogger(PrepareAtReadyBehavior.class);
@@ -48,9 +44,9 @@ public class PrepareAtReadyBehavior implements Behavior {
         var reboot = Skills.get("reboot", Heroes.getLegacyDuster(heroes).getSkills()); // +armor
 
         var actions = Arrays.asList(
-            new ActionMessage(Heroes.getCiCdGod(heroes).getId(), multicloud.getId(), Heroes.getJHipster(enemies).getId(), false),
-            new ActionMessage(Heroes.getJHipster(heroes).getId(), kotlin.getId(), Heroes.getJHipster(heroes).getId(), false),
-            new ActionMessage(Heroes.getLegacyDuster(heroes).getId(), ejbejbejb.getId(), Heroes.getJHipster(enemies).getId(), false)
+            new Action(Heroes.getCiCdGod(heroes), multicloud, Heroes.getJHipster(enemies), false),
+            new Action(Heroes.getJHipster(heroes), kotlin, Heroes.getJHipster(heroes), false),
+            new Action(Heroes.getLegacyDuster(heroes), ejbejbejb, Heroes.getJHipster(enemies), false)
         );
 
         arena.nextActions.addAll(actions);

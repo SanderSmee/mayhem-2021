@@ -38,13 +38,13 @@ public final class SendActionsBehavior implements Behavior {
         while (!arena.nextActions.isEmpty() && !suppressed) {
 
             try {
-                var msg = arena.nextActions.pollFirst();
+                var action = arena.nextActions.pollFirst();
 
-                if (!arena.currentStatus().getYou().get(msg.getHero()).isAlive()) {
+                if (!action.getOwner().isAlive()) {
                     continue;
                 }
 
-                var json = adapter.toString(msg);
+                var json = adapter.toString(action.asActionMessage());
 
                 logger.info("<A {}", json);
                 client.sendMessageImmediate(json);
