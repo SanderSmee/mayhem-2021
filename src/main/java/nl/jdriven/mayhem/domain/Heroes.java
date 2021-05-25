@@ -60,4 +60,8 @@ public final class Heroes {
     public static boolean is(Hero hero, String name) {
         return name.equals(hero.getName());
     }
+
+    public static boolean doesNotHaveBuff(Hero hero, Hero.Skill skill) {
+        return !hero.getBuffs().containsKey(skill.getName());
+    }
 }
