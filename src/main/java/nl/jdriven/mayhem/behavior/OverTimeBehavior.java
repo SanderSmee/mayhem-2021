@@ -7,8 +7,6 @@ import ninja.robbert.mayhem.api.StatusMessage;
 import nl.jdriven.mayhem.domain.Arena;
 import nl.jdriven.mayhem.domain.Heroes;
 import nl.jdriven.mayhem.domain.Skills;
-import nl.jdriven.mayhem.subsumption.OnNextTickBehavior;
-import nl.jdriven.mayhem.util.Randoms;
 
 import java.util.Comparator;
 import java.util.Optional;

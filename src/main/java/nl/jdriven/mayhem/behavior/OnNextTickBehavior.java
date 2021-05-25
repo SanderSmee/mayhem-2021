@@ -1,6 +1,7 @@
-package nl.jdriven.mayhem.subsumption;
+package nl.jdriven.mayhem.behavior;
 
 import nl.jdriven.mayhem.domain.Arena;
+import nl.jdriven.mayhem.subsumption.Behavior;
 
 public abstract class OnNextTickBehavior implements Behavior {
     protected final Arena arena;

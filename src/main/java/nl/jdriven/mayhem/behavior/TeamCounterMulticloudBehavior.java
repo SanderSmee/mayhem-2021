@@ -7,7 +7,6 @@ import ninja.robbert.mayhem.api.StatusMessage;
 import nl.jdriven.mayhem.domain.Arena;
 import nl.jdriven.mayhem.domain.Heroes;
 import nl.jdriven.mayhem.domain.Skills;
-import nl.jdriven.mayhem.subsumption.OnNextTickBehavior;
 
 public class TeamCounterMulticloudBehavior extends OnNextTickBehavior {
     public TeamCounterMulticloudBehavior(Arena arena) {
