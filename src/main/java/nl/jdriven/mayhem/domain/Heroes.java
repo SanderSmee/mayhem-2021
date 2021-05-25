@@ -4,13 +4,12 @@ import ninja.robbert.mayhem.api.Hero;
 import nl.jdriven.mayhem.util.Streams;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 public final class Heroes {
 
     public static Hero getHero(String name, List<Hero> heroes) {
         return heroes.stream()
-            .filter(hero -> name.equals(hero.getName()))
+            .filter(hero -> Heroes.is(hero, name))
             .collect(Streams.onlyOne());
     }
 
@@ -31,19 +30,13 @@ public final class Heroes {
         var ciCdGod = getCiCdGod(heroes);
         var legacyDuster = getLegacyDuster(heroes);
 
-        return jhipster.isAlive() && !jhipster.getBuffs().containsKey(skill.getName())
+        return jhipster.isAlive() && !hasBuff(jhipster, skill)
             ? jhipster
-            : (ciCdGod.isAlive() && !ciCdGod.getBuffs().containsKey(skill.getName())
+            : (ciCdGod.isAlive() && !hasBuff(ciCdGod, skill)
                 ? ciCdGod
-                : legacyDuster.isAlive() && !legacyDuster.getBuffs().containsKey(skill.getName())
+                : legacyDuster.isAlive() && !hasBuff(legacyDuster, skill)
                     ? legacyDuster
                     : null);
-    }
-
-    public static boolean canExecute(Hero hero, String skill) {
-        var theSkill = Skills.get(skill, hero);
-
-        return canExecute(hero, theSkill);
     }
 
     public static boolean canExecute(Hero hero, Hero.Skill theSkill) {
@@ -54,14 +47,14 @@ public final class Heroes {
     }
 
     public static List<Hero> living(List<Hero> heroes) {
-        return heroes.stream().filter(Hero::isAlive).collect(Collectors.toList());
+        return heroes.stream().filter(Hero::isAlive).toList();
     }
 
     public static boolean is(Hero hero, String name) {
         return name.equals(hero.getName());
     }
 
-    public static boolean doesNotHaveBuff(Hero hero, Hero.Skill skill) {
-        return !hero.getBuffs().containsKey(skill.getName());
+    public static boolean hasBuff(Hero hero, Hero.Skill skill) {
+        return hero.getBuffs().containsKey(skill.getName());
     }
 }

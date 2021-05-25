@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 public class RandomBehavior implements Behavior {
     private final Logger logger = LoggerFactory.getLogger(RandomBehavior.class);
@@ -49,7 +48,7 @@ public class RandomBehavior implements Behavior {
             .map(hero -> {
                 var applicableSkills = hero.getSkills().stream()
                     .filter(skill -> Heroes.canExecute(hero, skill))
-                    .collect(Collectors.toList());
+                    .toList();
                 var skill = Randoms.randomFrom(applicableSkills);
 
                 if (skill == null) {
