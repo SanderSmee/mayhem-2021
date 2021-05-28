@@ -11,7 +11,8 @@ public final class Heroes {
     public static Hero getHero(String name, List<Hero> heroes) {
         return heroes.stream()
             .filter(hero -> Heroes.is(hero, name))
-            .collect(Streams.onlyOne());
+            .collect(Streams.zeroOrOne())
+            .orElse(null);
     }
 
     public static Hero getJHipster(List<Hero> heroes) {
@@ -36,11 +37,11 @@ public final class Heroes {
         var ciCdGod = getCiCdGod(heroes);
         var legacyDuster = getLegacyDuster(heroes);
 
-        return jhipster.isAlive()
+        return jhipster != null && jhipster.isAlive()
             ? Optional.of(jhipster)
-            : ciCdGod.isAlive()
+            : ciCdGod != null && ciCdGod.isAlive()
                 ? Optional.of(ciCdGod)
-                : legacyDuster.isAlive()
+                : legacyDuster != null && legacyDuster.isAlive()
                     ? Optional.of(legacyDuster)
                     : Optional.empty();
     }
